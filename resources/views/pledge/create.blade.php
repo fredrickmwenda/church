@@ -63,7 +63,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 {!! Form::label('recur_start_date',trans_choice('general.recur_starts',1),array('class'=>'')) !!}
-                                {!! Form::text('recur_start_date',date("Y-m-d"), array('class' => 'form-control date-picker','id'=>'recur_start_date')) !!}
+                                {!! Form::text('recur_start_date',date("Y-m-d"), array('class' => 'form-control date-pickerr','id'=>'recur_start_date')) !!}
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@
                         <div class="form-group">
                             <div class="form-line">
                                 {!! Form::label('recur_end_date',trans_choice('general.recur_ends',1),array('class'=>'')) !!}
-                                {!! Form::text('recur_end_date',null, array('class' => 'form-control date-picker','id'=>'recur_end_date')) !!}
+                                {!! Form::text('recur_end_date',null, array('class' => 'form-control date-pickerrr','id'=>'recur_end_date')) !!}
                             </div>
                         </div>
                     </div>
@@ -127,6 +127,66 @@
     </div>
     <!-- /.box -->
 @endsection
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new tempusDominus.TempusDominus(document.querySelector('.date-picker'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+        new tempusDominus.TempusDominus(document.querySelector('.date-pickerr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+        new tempusDominus.TempusDominus(document.querySelector('.date-pickerrr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+    });
+</script>
+@endpush
 @section('footer-scripts')
     <script>
 

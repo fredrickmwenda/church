@@ -38,7 +38,7 @@
                         {!! Form::label('End Date:',null,array('class'=>' control-label')) !!}
                         <div class="input-icon">
                             <i class="fa fa-calendar"></i>
-                            {!! Form::text('subject',date("Y-m-d"),array('class'=>'form-control date-picker','required'=>'required', 'data-date-viewmode'=>"years",'data-date-end-date'=>"+0d",
+                            {!! Form::text('subject',date("Y-m-d"),array('class'=>'form-control date-pickerr','required'=>'required', 'data-date-viewmode'=>"years",'data-date-end-date'=>"+0d",
                             'name'=>"end" )) !!}
 
                         </div>
@@ -157,7 +157,49 @@
     </div>
 </div>
 @endsection
-@section('page-footer-scripts')
+
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new tempusDominus.TempusDominus(document.querySelector('.date-picker'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+        new tempusDominus.TempusDominus(document.querySelector('.date-pickerr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+    });
+</script>
+
 <script src="{{ asset('assets/global/plugins/datatables/media/js/jquery.dataTables.min.js') }}" type="text/javascript"></script>
 <script src="{{ asset('assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js') }}" type="text/javascript"></script>
 <script>
@@ -186,4 +228,4 @@
         });
     });
 </script>
-@endsection
+@endpush

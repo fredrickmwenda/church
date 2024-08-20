@@ -80,7 +80,7 @@
             </div>
             <div class="form-group">
                 {!! Form::label('purchase_date',trans_choice('general.purchase',1).' '.trans_choice('general.date',1),array('class'=>'')) !!}
-                {!! Form::text('purchase_date',$asset->purchase_date, array('class' => 'form-control date-picker', 'placeholder'=>"",)) !!}
+                {!! Form::text('purchase_date',$asset->purchase_date, array('class' => 'form-control date-pickerr', 'placeholder'=>"",)) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('purchase_price',trans_choice('general.purchase',1).' '.trans_choice('general.price',1),array('class'=>'')) !!}

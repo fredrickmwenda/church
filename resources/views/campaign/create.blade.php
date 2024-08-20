@@ -34,7 +34,7 @@
             <div class="form-group">
                 {!! Form::label('end_date',trans_choice('general.end',1).' '.trans_choice('general.date',1),array('class'=>'col-sm-2 control-label')) !!}
                 <div class="col-sm-10">
-                    {!! Form::text('end_date',null, array('class' => 'form-control date-picker', 'placeholder'=>"",''=>'')) !!}
+                    {!! Form::text('end_date',null, array('class' => 'form-control date-pickerr', 'placeholder'=>"",''=>'')) !!}
                 </div>
             </div>
             <div class="form-group">
@@ -53,3 +53,47 @@
     <!-- /.box -->
 @endsection
 
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new tempusDominus.TempusDominus(document.querySelector('.date-picker'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+
+        new tempusDominus.TempusDominus(document.querySelector('.date-pickerr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+       
+    });
+</script>
+@endpush

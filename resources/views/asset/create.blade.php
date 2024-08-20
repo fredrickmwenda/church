@@ -68,7 +68,7 @@
             </div>
             <div class="form-group">
                 {!! Form::label('purchase_date',trans_choice('general.purchase',1).' '.trans_choice('general.date',1),array('class'=>'')) !!}
-                {!! Form::text('purchase_date',null, array('class' => 'form-control date-picker', 'placeholder'=>"",)) !!}
+                {!! Form::text('purchase_date',null, array('class' => 'form-control date-pickerr', 'placeholder'=>"",)) !!}
             </div>
             <div class="form-group">
                 {!! Form::label('purchase_price',trans_choice('general.purchase',1).' '.trans_choice('general.price',1),array('class'=>'')) !!}
@@ -137,6 +137,51 @@
     </div>
     <!-- /.box -->
 @endsection
+@push('js')
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    new tempusDominus.TempusDominus(document.querySelector('.date-picker'), {
+        display: {
+            components: {
+                calendar: true,
+                date: true,
+                month: true,
+                year: true,
+                decades: true,
+                clock: false,
+                hours: false,
+                minutes: false,
+                seconds: false
+            }
+        },
+        localization: {
+            format: 'yyyy-MM-dd' // Adjust format according to your needs
+        }
+    });
+    new tempusDominus.TempusDominus(document.querySelector('.date-pickerr'), {
+        display: {
+            components: {
+                calendar: true,
+                date: true,
+                month: true,
+                year: true,
+                decades: true,
+                clock: false,
+                hours: false,
+                minutes: false,
+                seconds: false
+            }
+        },
+        localization: {
+            format: 'yyyy-MM-dd' // Adjust format according to your needs
+        }
+    });
+  
+
+});
+
+</script>
+@endpush
 @section('footer-scripts')
     <script>
 
@@ -186,11 +231,7 @@
             }
         }
         function bindDeactivate() {
-            $('.date-picker').datepicker({
-                orientation: "left",
-                autoclose: true,
-                format: "yyyy-mm-dd"
-            });
+
             $(".touchspin").TouchSpin({
                 buttondown_class: 'btn blue',
                 buttonup_class: 'btn blue',

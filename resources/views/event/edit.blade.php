@@ -83,13 +83,13 @@
             <div class="form-group">
                 {!! Form::label('recur_start_date',trans_choice('general.recur_starts',1),array('class'=>'col-sm-4 control-label')) !!}
                 <div class="col-sm-8">
-                    {!! Form::text('recur_start_date',$event->recur_start_date, array('class' => 'form-control date-picker','id'=>'recur_start_date')) !!}
+                    {!! Form::text('recur_start_date',$event->recur_start_date, array('class' => 'form-control date-pickerrr','id'=>'recur_start_date')) !!}
                 </div>
             </div>
             <div class="form-group">
                 {!! Form::label('recur_end_date',trans_choice('general.recur_ends',1),array('class'=>'col-sm-4 control-label')) !!}
                 <div class="col-sm-8">
-                    {!! Form::text('recur_end_date',$event->recur_end_date, array('class' => 'form-control date-picker','id'=>'recur_end_date')) !!} </div>
+                    {!! Form::text('recur_end_date',$event->recur_end_date, array('class' => 'form-control date-picke','id'=>'recur_end_date')) !!} </div>
             </div>
         </div>
         <div class="form-group">
@@ -226,6 +226,42 @@
             }
         });
         new tempusDominus.TempusDominus(document.querySelector('.date-pickerr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+        new tempusDominus.TempusDominus(document.querySelector('.date-pickerrr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+        new tempusDominus.TempusDominus(document.querySelector('.date-picke'), {
             display: {
                 components: {
                     calendar: true,

@@ -25,7 +25,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         {!! Form::label('Date',null,array('class'=>'')) !!}
-                        {!! Form::text('date', date("Y-d-m"), array('class' => 'form-control date-picker','required'=>'required')) !!}
+                        {!! Form::text('date', date("Y-d-m"), array('class' => 'form-control date-pickerr','required'=>'required')) !!}
                     </div>
                 </div>
                 <div class="form-group">
@@ -55,3 +55,46 @@
 </div>
 <!-- /.box -->
 @endsection
+
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new tempusDominus.TempusDominus(document.querySelector('.date-picker'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+        new tempusDominus.TempusDominus(document.querySelector('.date-pickerr'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+    });
+</script>
+@endpush

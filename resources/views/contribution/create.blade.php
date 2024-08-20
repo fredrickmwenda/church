@@ -214,6 +214,31 @@
     </div>
     <!-- /.box -->
 @endsection
+@push('js')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        new tempusDominus.TempusDominus(document.querySelector('.date-picker'), {
+            display: {
+                components: {
+                    calendar: true,
+                    date: true,
+                    month: true,
+                    year: true,
+                    decades: true,
+                    clock: false,
+                    hours: false,
+                    minutes: false,
+                    seconds: false
+                }
+            },
+            localization: {
+                format: 'yyyy-MM-dd' // Adjust format according to your needs
+            }
+        });
+       
+    });
+</script>
+@endpush
 @section('footer-scripts')
     <script>
         $("#member_type").on('ifChecked', function(e) {
