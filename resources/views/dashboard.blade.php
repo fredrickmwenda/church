@@ -106,7 +106,9 @@ $events = $events;
                 <span class="dash-widget-icon"><i class="fa-solid fa-users"></i></span>
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.registered', 1) }}</h4>
-                    <span>{{ \App\Models\Member::count() }}</span>
+                    <a href="{{ url('member/data') }}" class="text-decoration-none">
+                        <span>{{ \App\Models\Member::count() }}</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -119,7 +121,10 @@ $events = $events;
                 <span class="dash-widget-icon"><i class="fa-solid fa-comments"></i></span>
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.follow_up', 1) }}</h4>
-                    <span>{{ \App\Models\FollowUp::count() }}</span>
+                    <a href="{{ url('follow_up/data') }}" class="text-decoration-none">
+
+                        <span>{{ \App\Models\FollowUp::count() }}</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -133,11 +138,13 @@ $events = $events;
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.soul_winning', 2) }}</h4>
 
-
-                    <span>
-                        {{ \App\Models\SoulWinning::count() }}
+                    <a href="{{ url('soul_winning/data') }}" class="text-decoration-none">
 
                         <span>
+                            {{ \App\Models\SoulWinning::count() }}
+
+                            <span>
+                    </a>
 
 
                 </div>
@@ -154,10 +161,12 @@ $events = $events;
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.branch', 2) }}</h4>
 
+                    <a href="{{ url('branch/data') }}" class="text-decoration-none">
 
-                    <span>
-                        {{ \App\Models\Branch::count() }}
                         <span>
+                            {{ \App\Models\Branch::count() }}
+                            <span>
+                    </a>
 
 
                 </div>
@@ -172,6 +181,8 @@ $events = $events;
                 <span class="dash-widget-icon"><i class="fa-solid fa-donate"></i></span>
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.contribution', 2) }}</h4>
+                    <a href="{{ url('contribution/data') }}" class="text-decoration-none">
+
                     @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
                     <span>
                         {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
@@ -182,6 +193,7 @@ $events = $events;
                         {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }}
                         {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
                     @endif
+</a>
                 </div>
             </div>
         </div>
@@ -195,6 +207,7 @@ $events = $events;
                 <span class="dash-widget-icon"><i class="fa-solid fa-gift"></i></span>
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.pledge', 2) }}</h4>
+                    <a href="{{ url('pledge/data') }}" class="text-decoration-none">
 
                     @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
                     <span>
@@ -205,6 +218,7 @@ $events = $events;
                         {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }}
                         {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
                     @endif
+</a>
 
                 </div>
             </div>
@@ -222,16 +236,18 @@ $events = $events;
                 <span class="dash-widget-icon"><i class="fa-solid fa-donate"></i></span>
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('general.expense', 2) }}</h4>
+                    <a href="{{ url('expense/data') }}" class="text-decoration-none">
 
-                    @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
-                    <span>
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
-                        {{ number_format(\App\Helpers\GeneralHelper::total_expenses(), 2) }} </span>
-                    @else
-                    <span>
-                        {{ number_format(\App\Helpers\GeneralHelper::total_expenses(), 2) }}
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
-                    @endif
+                        @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
+                        <span>
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
+                            {{ number_format(\App\Helpers\GeneralHelper::total_expenses(), 2) }} </span>
+                        @else
+                        <span>
+                            {{ number_format(\App\Helpers\GeneralHelper::total_expenses(), 2) }}
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
+                        @endif
+                    </a>
 
                 </div>
             </div>
@@ -246,16 +262,18 @@ $events = $events;
                 <span class="dash-widget-icon"><i class="fa-solid fa-calendar"></i></span>
                 <div class="dash-widget-info">
                     <h4>{{ trans_choice('Event Payments', 2) }}</h4>
+                    <a href="{{ url('event/data') }}" class="text-decoration-none">
 
-                    @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
-                    <span>
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
-                        {{ number_format(\App\Helpers\GeneralHelper::total_event_payments(), 2) }} </span>
-                    @else
-                    <span>
-                        {{ number_format(\App\Helpers\GeneralHelper::total_event_payments(), 2) }}
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
-                    @endif
+                        @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
+                        <span>
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
+                            {{ number_format(\App\Helpers\GeneralHelper::total_event_payments(), 2) }} </span>
+                        @else
+                        <span>
+                            {{ number_format(\App\Helpers\GeneralHelper::total_event_payments(), 2) }}
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
+                        @endif
+                    </a>
 
                 </div>
             </div>

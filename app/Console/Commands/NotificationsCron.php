@@ -98,8 +98,8 @@ class NotificationsCron extends Command
                     if (!empty($member->mobile_phone)) {
 
                         $response = Http::post('http://rslr.connectbind.com:8080/bulksms/bulksms', [
-                            'username' => 'msgh-test',
-                            'password' => 'As#23ghn',
+                            'username' => env('RSLR_USERNAME'),
+                            'password' => env('RSLR_PASSWORD'),
                             'type' => '0',
                             'dlr' =>  '1',
                             'destination' => $member->mobile_phone,

@@ -6811,6 +6811,11 @@ textarea.form-control {
 }
 .dash-widget .card-body .dash-widget-info span {
   font-size: 16px;
+  color: #0A113B;
+}
+
+.fillablie{
+  color: #0A113B;
 }
 
 .dash-statistics .stats-list {

@@ -245,18 +245,12 @@
                 right: 'month,agendaWeek,agendaDay'
             },
             buttonText: {
-                today: '{{trans_choice('
-                general.today ',1)}}',
-                month: '{{trans_choice('
-                general.month ',1)}}',
-                week: '{{trans_choice('
-                general.week ',1)}}',
-                day: '{{trans_choice('
-                general.day ',1)}}'
+                today: '{{trans_choice('general.today ',1)}}',
+                month: '{{trans_choice('general.month ',1)}}',
+                week: '{{trans_choice('general.week ',1)}}',
+                day: '{{trans_choice('general.day ',1)}}'
             },
-            events: {
-                !!$events!!
-            },
+            events: {!!$events!!},
             selectable: true,
             selectHelper: true,
             select: function(start, end, allDay) {
