@@ -18,7 +18,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-icon-180x180.png') }}">
     <link rel="icon" type="image/png" sizes="192x192" href="{{ asset('android-icon-192x192.png') }}">
     <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon-32x32.png') }}">
-    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('favicon-96x96.png') }}"> Home
+
     <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon-16x16.png') }}">
     <link rel="manifest" href="{{ asset('manifest.json') }}">
     <meta name="msapplication-TileColor" content="#ffffff">
@@ -102,118 +103,118 @@
 </head>
 
 <body>
-    <div class="main-wrapper">
+<div class="main-wrapper">
 
-        <div class="header">
+<div class="header">
 
-            <!-- Logo -->
+    <!-- Logo -->
 
-            <div class="header-left">
-                <a href="{{ url('/') }}" class="logo">
-                    <img class="logo-mini" src="
-                {{ asset('uploads/' . \App\Models\Setting::where('setting_key', 'company_logo')->first()->setting_value) }}" style="height:60px; width:120px;  padding:5px;" />
-                    <!-- logo for regular state and mobile devices -->
+    <div class="header-left">
+        <a href="{{ url('/') }}" class="logo">
+            <img class="logo-mini" src="
+        {{ asset('uploads/' . \App\Models\Setting::where('setting_key', 'company_logo')->first()->setting_value) }}" style="height:60px; width:120px;  padding:5px;" />
+            <!-- logo for regular state and mobile devices -->
 
-                    <!-- <img class="logo-lg"
-                    src="
-                {{ asset('uploads/' . \App\Models\Setting::where('setting_key', 'company_logo')->first()->setting_value) }}"
-                    style="height:50px; width:auto; padding:5px;" /> -->
+            <!-- <img class="logo-lg"
+            src="
+        {{ asset('uploads/' . \App\Models\Setting::where('setting_key', 'company_logo')->first()->setting_value) }}"
+            style="height:50px; width:auto; padding:5px;" /> -->
 
-                    <!-- <img src="assets/img/logo.png" width="40" height="40" alt="Logo"> -->
-                </a>
-            </div>
-
-            <a id="toggle_btn" href="javascript:void(0);">
-                <span class="bar-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
-            </a>
-
-            <!-- Header Title -->
-            <div class="page-title-box">
-                <h3>Msoft Church</h3>
-            </div>
-
-            <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa-solid fa-bars"></i></a>
-
-
-            <!-- Header Menu -->
-            <ul class="nav user-menu">
-                <li class="nav-item dropdown has-arrow main-drop">
-                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-                        <span class="user-img"><img src="{{ asset('assets/smart/img/profiles/avatar-21.jpg')}}" alt="User Image">
-                            <span class="status online"></span></span>
-                        <span>{{ Sentinel::getUser()->first_name }} {{ Sentinel::getUser()->last_name }}</span>
-                    </a>
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ url('user/' . Sentinel::getUser()->id . '/profile') }}">My Profile</a>
-                        <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
-                    </div>
-                </li>
-
-            </ul>
-            <!-- Header Navbar: style can be found in header.less -->
-
-        </div>
-        <!-- Left side column. contains the logo and sidebar -->
-
-        @include('left_menu.admin')
-        <!-- end Left side column. contains the logo and sidebar -->
-        <div class="page-wrapper">
-            <!-- Content Header (Page header) -->
-            <section class="content-header" style="min-height: 30px; display: flex; justify-content: space-between; align-items: center;padding:30px;">
-                <h1>@yield('title')</h1>
-                <ol class="breadcrumb" style="margin-bottom: 0;">
-                    <li><a href="{{ url('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>/
-                    <li class="active">@yield('title')</li>
-                </ol>
-            </section>
-
-            <!-- Main content -->
-            <section class="content">
-                @if (Session::has('flash_notification'))
-                @foreach (Session::get('flash_notification') as $key)
-                <script>
-                    $(document).ready(function() {
-                        toastr. {
-                            {
-                                $key - > level
-                            }
-                        }('{{ $key->message }}', 'Response Status')
-                    })
-                </script>
-                @endforeach
-                @endif
-                @if (isset($msg))
-                <div class="alert alert-success">
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{ $msg }}
-                </div>
-                @endif
-                @if (isset($error))
-                <div class="alert alert-error">
-                    <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
-                    {{ $error }}
-                </div>
-                @endif
-                @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-                @endif
-                @yield('content')
-            </section>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
-        @include('partials.dash_footer')
+            <!-- <img src="assets/img/logo.png" width="40" height="40" alt="Logo"> -->
+        </a>
     </div>
+
+    <a id="toggle_btn" href="javascript:void(0);">
+        <span class="bar-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </span>
+    </a>
+
+    <!-- Header Title -->
+    <div class="page-title-box">
+        <h3>Msoft Church</h3>
+    </div>
+
+    <a id="mobile_btn" class="mobile_btn" href="#sidebar"><i class="fa-solid fa-bars"></i></a>
+
+
+    <!-- Header Menu -->
+    <ul class="nav user-menu">
+        <li class="nav-item dropdown has-arrow main-drop">
+            <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
+                <span class="user-img"><img src="{{ asset('assets/smart/img/profiles/avatar-21.jpg')}}" alt="User Image">
+                    <span class="status online"></span></span>
+                <span>{{ Sentinel::getUser()->first_name }} {{ Sentinel::getUser()->last_name }}</span>
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ url('user/' . Sentinel::getUser()->id . '/profile') }}">My Profile</a>
+                <a class="dropdown-item" href="{{ url('logout') }}">Logout</a>
+            </div>
+        </li>
+
+    </ul>
+    <!-- Header Navbar: style can be found in header.less -->
+
+</div>
+<!-- Left side column. contains the logo and sidebar -->
+
+@include('left_menu.admin')
+<!-- end Left side column. contains the logo and sidebar -->
+<div class="page-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header" style="min-height: 30px; display: flex; justify-content: space-between; align-items: center;padding:30px;">
+        <h1>@yield('title')</h1>
+        <ol class="breadcrumb" style="margin-bottom: 0;">
+            <li><a href="{{ url('dashboard') }}"><i class="fa fa-dashboard"></i> Home</a></li>/
+            <li class="active">@yield('title')</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        @if (Session::has('flash_notification'))
+        @foreach (Session::get('flash_notification') as $key)
+        <script>
+            $(document).ready(function() {
+                toastr. {
+                    {
+                        $key - > level
+                    }
+                }('{{ $key->message }}', 'Response Status')
+            })
+        </script>
+        @endforeach
+        @endif
+        @if (isset($msg))
+        <div class="alert alert-success">
+            <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ $msg }}
+        </div>
+        @endif
+        @if (isset($error))
+        <div class="alert alert-error">
+            <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true">&times;</button>
+            {{ $error }}
+        </div>
+        @endif
+        @if (count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
+        @yield('content')
+    </section>
+    <!-- /.content -->
+</div>
+<!-- /.content-wrapper -->
+@include('partials.dash_footer')
+</div>
     <!-- ./wrapper -->
 
 

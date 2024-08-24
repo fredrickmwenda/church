@@ -71,13 +71,13 @@ class MemberController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('members.view')) {
-                $action .= '<li><a href="' . url('member/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('member/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('members.update')) {
-                $action .= '<li><a href="' . url('member/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('member/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('members.delete')) {
-                $action .= '<li><a href="' . url('member/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('member/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;
@@ -189,7 +189,7 @@ class MemberController extends Controller
             }
         }
 
-        // dd($member_photo);
+   
 
         $files = array();
         if ($request->hasFile('files')) {
@@ -289,7 +289,7 @@ class MemberController extends Controller
         foreach (Member::all() as $key) {
             $members[$key->id] = $key->first_name . ' ' . $key->middle_name . ' ' . $key->last_name . '(#' . $key->id . ')';
         }
-        //dd($member);
+   
         //get custom fields
         $custom_fields = CustomFieldMeta::where('category', 'members')->where('parent_id', $member->id)->get();
         return view('member.show', compact('member', 'custom_fields', 'members'));
@@ -596,7 +596,7 @@ class MemberController extends Controller
             return redirect()->back();
         }
 
-        //dd($id, Sentinel::getUser()->id);
+        
         //add family member with role of head
         $family_member = new FamilyMember();
         $family_member->user_id = Sentinel::getUser()->id;
@@ -604,7 +604,7 @@ class MemberController extends Controller
         $family_member->family_id = $id;
         $family_member->family_role = $request->family_role;
         $family_member->save();
-        dd($family_member);
+        
         GeneralHelper::audit_trail("Added family for member  with id:" . $request->member_id);
         Flash::success(trans('general.successfully_saved'));
         return redirect()->back();
@@ -747,88 +747,90 @@ class MemberController extends Controller
     // }
     
     public function emailStatement($member)
-{
-    // Check for permission to view members
-    if (!Sentinel::hasAccess('members.view')) {
-        Flash::warning("Permission Denied");
-        return redirect()->back();
-    }
-
-    if (empty($member->email)) {
-        Flash::warning("Member has no email set");
+    {
+        // Check for permission to view members
+        if (!Sentinel::hasAccess('members.view')) {
+            Flash::warning("Permission Denied");
+            return redirect()->back();
+        }
+    
+        if (empty($member->email)) {
+            Flash::warning("Member has no email set");
+            return redirect('member/' . $member->id . '/show');
+        }
+    
+        // Prepare the email body
+        $template = Setting::where('setting_key', 'member_statement_email_template')->first();
+        $body = $template ? $template->setting_value : '';
+        $placeholders = [
+            '{firstName}' => $member->first_name,
+            '{middleName}' => $member->middle_name,
+            '{lastName}' => $member->last_name,
+            '{address}' => $member->address,
+            '{homePhone}' => $member->home_phone,
+            '{mobilePhone}' => $member->mobile_phone_phone,
+            '{email}' => $member->email,
+            '{totalContributions}' => GeneralHelper::member_total_contributions($member->id),
+            '{totalPledges}' => round(GeneralHelper::member_total_pledges($member->id), 2),
+            '{total}' => round(
+                GeneralHelper::member_total_contributions($member->id) + GeneralHelper::member_total_pledges($member->id),
+                2
+            ),
+        ];
+    
+        foreach ($placeholders as $key => $value) {
+            $body = str_replace($key, $value, $body);
+        }
+    
+        // Generate the PDF and save it temporarily
+        $pdfPath = public_path('uploads/temporary/member_statement_' . $member->id . '.pdf');
+        PDF::loadView('member.pdf_member_statement', compact('member'))
+            ->setPaper('a4')
+            ->setOption('author', 'Tererai Mugova')
+            ->save($pdfPath);
+    
+        // Ensure the PDF file was created successfully
+        if (!file_exists($pdfPath)) {
+            Flash::error("Failed to generate the PDF statement.");
+            return redirect('member/' . $member->id . '/show');
+        }
+    
+        $file_name = $member->first_name . ' ' . $member->last_name . " - Member Statement.pdf";
+    
+        // Send the email with the PDF attached using Swift_Attachment
+        Mail::send([], [], function ($message) use ($member, $file_name, $body, $pdfPath) {
+            $company_email = Setting::where('setting_key', 'company_email')->first()->setting_value;
+            $company_name = Setting::where('setting_key', 'company_name')->first()->setting_value;
+    
+            $message->from($company_email, $company_name)
+                    ->to($member->email)
+                    ->subject(Setting::where('setting_key', 'member_statement_email_subject')->first()->setting_value)
+                    ->setBody($body, 'text/html')
+                    ->attach(
+                        \Swift_Attachment::fromPath($pdfPath)
+                            ->setFilename($file_name)
+                            ->setContentType('application/pdf')
+                    );
+        });
+    
+        // Remove the temporary file after sending the email
+        if (file_exists($pdfPath)) {
+            unlink($pdfPath);
+        }
+    
+        // Log the email in the database
+        Email::create([
+            'user_id' => Sentinel::getUser()->id,
+            'message' => $body,
+            'subject' => Setting::where('setting_key', 'member_statement_email_subject')->first()->setting_value,
+            'recipients' => 1,
+            'send_to' => $member->first_name . ' ' . $member->last_name . ' (' . $member->id . ')',
+        ]);
+    
+        Flash::success("Statement successfully sent");
         return redirect('member/' . $member->id . '/show');
     }
-
-    // Prepare the email body
-    $template = Setting::where('setting_key', 'member_statement_email_template')->first();
-    $body = $template ? $template->setting_value : '';
-    $placeholders = [
-        '{firstName}' => $member->first_name,
-        '{middleName}' => $member->middle_name,
-        '{lastName}' => $member->last_name,
-        '{address}' => $member->address,
-        '{homePhone}' => $member->home_phone,
-        '{mobilePhone}' => $member->mobile_phone_phone,
-        '{email}' => $member->email,
-        '{totalContributions}' => GeneralHelper::member_total_contributions($member->id),
-        '{totalPledges}' => round(GeneralHelper::member_total_pledges($member->id), 2),
-        '{total}' => round(
-            GeneralHelper::member_total_contributions($member->id) + GeneralHelper::member_total_pledges($member->id),
-            2
-        ),
-    ];
-
-    foreach ($placeholders as $key => $value) {
-        $body = str_replace($key, $value, $body);
-    }
-
-    // Generate the PDF and save it temporarily
-    $pdfPath = public_path('uploads/temporary/member_statement' . $member->id . '.pdf');
-    PDF::loadView('member.pdf_member_statement', compact('member'))
-        ->setPaper('a4')
-        ->setOption('author', 'Tererai Mugova')
-        ->save($pdfPath);
-
-    // Ensure the PDF file was created successfully
-    if (!file_exists($pdfPath)) {
-        Flash::error("Failed to generate the PDF statement.");
-        return redirect('member/' . $member->id . '/show');
-    }
-
-    $file_name = $member->first_name . ' ' . $member->last_name . " - Member Statement.pdf";
-
-    // Send the email with the PDF attached
-    Mail::send([], [], function ($message) use ($member, $file_name, $body, $pdfPath) {
-        $company_email = Setting::where('setting_key', 'company_email')->first()->setting_value;
-        $company_name = Setting::where('setting_key', 'company_name')->first()->setting_value;
-
-        $message->from($company_email, $company_name)
-                ->to($member->email)
-                ->subject(Setting::where('setting_key', 'member_statement_email_subject')->first()->setting_value)
-                ->setBody($body, 'text/html')
-                ->attach($pdfPath, [
-                    'as' => $file_name,
-                    'mime' => 'application/pdf',
-                ]);
-    });
-
-    // Remove the temporary file after sending the email
-    if (file_exists($pdfPath)) {
-        unlink($pdfPath);
-    }
-
-    // Log the email in the database
-    Email::create([
-        'user_id' => Sentinel::getUser()->id,
-        'message' => $body,
-        'subject' => Setting::where('setting_key', 'member_statement_email_subject')->first()->setting_value,
-        'recipients' => 1,
-        'send_to' => $member->first_name . ' ' . $member->last_name . ' (' . $member->id . ')',
-    ]);
-
-    Flash::success("Statement successfully sent");
-    return redirect('member/' . $member->id . '/show');
-}
+    
 
     
 }

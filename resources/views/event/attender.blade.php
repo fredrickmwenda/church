@@ -102,9 +102,17 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if(!empty($key->member->dob))
-                                                {{date("Y-m-d")-$key->member->dob}}
-                                            @endif
+                                        @if(!empty($key->member->dob))
+                                    @php
+                                    // Create a DateTime object from the date of birth
+                                    $dob = new DateTime($key->member->dob);
+                                    // Create a DateTime object for the current date
+                                    $currentDate = new DateTime();
+                                    // Calculate the difference between the current date and date of birth
+                                    $age = $currentDate->diff($dob)->y;
+                                    @endphp
+                                    {{ $age }}
+                                    @endif
                                         </td>
                                         <td>{!! $key->member->address !!}</td>
                                         <td>

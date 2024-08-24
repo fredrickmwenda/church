@@ -62,13 +62,13 @@ class SoulWinningController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('members.view')) {
-                $action .= '<li><a href="' . url('soul_winning/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('soul_winning/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('members.update')) {
-                $action .= '<li><a href="' . url('soul_winning/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('soul_winning/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('members.delete')) {
-                $action .= '<li><a href="' . url('soul_winning/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('soul_winning/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

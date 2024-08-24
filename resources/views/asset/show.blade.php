@@ -61,11 +61,11 @@ Loan Details
                             <span class="fa fa-caret-down"></span></button>
                         <ul class="dropdown-menu" role="menu">
 
-                            <li>
+                            <li class="sentiment">
                                 <a href="{{url('loan/'.$borrower->id.'/print')}}" target="_blank">Print Statement</a>
                             </li>
 
-                            <li>
+                            <li class="sentiment">
                                 <a href="{{url('loan/'.$borrower->id.'/pdf')}}" target="_blank">Download in PDF</a>
                             </li>
 

@@ -55,7 +55,7 @@ class CommunicationController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('communication.delete')) {
-                $action .= '<li><a href="' . url('communication/email/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('communication/email/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;
@@ -86,7 +86,7 @@ class CommunicationController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('communication.delete')) {
-                $action .= '<li><a href="' . url('communication/email/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('communication/email/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;
@@ -269,26 +269,29 @@ class CommunicationController extends Controller
             Flash::warning("Permission Denied");
             return redirect()->back();
         }
+    
         $body = $request->message;
         $recipients = 1;
+        
         if (Setting::where('setting_key', 'sms_enabled')->first()->setting_value == 1) {
             if ($request->send_to == 0) {
                 $active_sms = Setting::where('setting_key', 'active_sms')->first()->setting_value;
                 foreach (Member::all() as $member) {
-                    //lets build and replace available tags
-                    $body = str_replace('{firstName}', $member->first_name, $body);
-                    $body = str_replace('{middleName}', $member->middle_name, $body);
-                    $body = str_replace('{lastName}', $member->last_name, $body);
-                    $body = str_replace('{address}', $member->address, $body);
-                    $body = str_replace('{homePhone}', $member->home_phone, $body);
-                    $body = str_replace('{mobilePhone}', $member->mobile_phone, $body);
-                    $body = str_replace('{email}', $member->email, $body);
+                    // Replace available tags
+                    $body = str_replace(['{firstName}', '{middleName}', '{lastName}', '{address}', '{homePhone}', '{mobilePhone}', '{email}'],
+                                        [$member->first_name, $member->middle_name, $member->last_name, $member->address, $member->home_phone, $member->mobile_phone, $member->email],
+                                        $body);
                     $body = trim(strip_tags($body));
                     if (!empty($member->mobile_phone)) {
-                        GeneralHelper::send_sms($member->mobile_phone, $body);
+                        $result = GeneralHelper::send_sms($member->mobile_phone, $body);
+                        if (!$result['success']) {
+                            Flash::error($result['message']);
+                            return redirect()->back();
+                        }
                     }
-                    $recipients = $recipients + 1;
+                    $recipients++;
                 }
+    
                 $sms = new Sms();
                 $sms->user_id = Sentinel::getUser()->id;
                 $sms->message = $body;
@@ -296,35 +299,39 @@ class CommunicationController extends Controller
                 $sms->recipients = $recipients;
                 $sms->send_to = 'All members';
                 $sms->save();
-                GeneralHelper::audit_trail("Sent SMS   to all borrower");
+    
+                GeneralHelper::audit_trail("Sent SMS to all members");
                 Flash::success("SMS successfully sent");
                 return redirect('communication/sms');
             } else {
                 $member = Member::find($request->send_to);
-                //lets build and replace available tags
-                $body = str_replace('{firstName}', $member->first_name, $body);
-                $body = str_replace('{middleName}', $member->middle_name, $body);
-                $body = str_replace('{lastName}', $member->last_name, $body);
-                $body = str_replace('{address}', $member->address, $body);
-                $body = str_replace('{homePhone}', $member->home_phone, $body);
-                $body = str_replace('{mobilePhone}', $member->mobile_phone, $body);
-                $body = str_replace('{email}', $member->email, $body);
+    
+                // Replace available tags
+                $body = str_replace(['{firstName}', '{middleName}', '{lastName}', '{address}', '{homePhone}', '{mobilePhone}', '{email}'],
+                                    [$member->first_name, $member->middle_name, $member->last_name, $member->address, $member->home_phone, $member->mobile_phone, $member->email],
+                                    $body);
                 $body = trim(strip_tags($body));
+    
                 if (!empty($member->mobile_phone)) {
-                    $active_sms = Setting::where('setting_key', 'active_sms')->first()->setting_value;
-                    GeneralHelper::send_sms($member->mobile_phone, $body);
+                    $result = GeneralHelper::send_sms($member->mobile_phone, $body);
+                    if (!$result['success']) {
+                        Flash::error($result['message']);
+                        return redirect()->back();
+                    }
+    
                     $sms = new Sms();
                     $sms->user_id = Sentinel::getUser()->id;
                     $sms->message = $body;
-                    $sms->gateway = $active_sms;
+                    $sms->gateway = Setting::where('setting_key', 'active_sms')->first()->setting_value;
                     $sms->recipients = $recipients;
                     $sms->send_to = $member->first_name . ' ' . $member->last_name;
                     $sms->save();
+    
                     Flash::success("SMS successfully sent");
                     return redirect('communication/sms');
                 }
             }
-            GeneralHelper::audit_trail("Sent SMS   to member");
+            GeneralHelper::audit_trail("Sent SMS to member");
             Flash::success("Sms successfully sent");
             return redirect('communication/sms');
         } else {
@@ -332,6 +339,7 @@ class CommunicationController extends Controller
             return redirect('setting/data')->with(array('error' => 'SMS is disabled, please enable it.'));
         }
     }
+    
 
 
     public function deleteSms($id)

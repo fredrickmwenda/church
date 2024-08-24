@@ -70,18 +70,18 @@ class FollowUpController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('follow_ups.view')) {
-                $action .= '<li><a href="' . url('follow_up/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('follow_up/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('follow_ups.update')) {
                 if($data->status==1){
-                    $action .= '<li><a href="' . url('follow_up/' . $data->id . '/incomplete') . '" class="delete">' . trans_choice('general.mark_as', 1).' '.trans_choice('general.incomplete', 1) . '</a></li>';
+                    $action .= '<li class="sentiment"><a href="' . url('follow_up/' . $data->id . '/incomplete') . '" class="delete">' . trans_choice('general.mark_as', 1).' '.trans_choice('general.incomplete', 1) . '</a></li>';
                 }else{
-                    $action .= '<li><a href="' . url('follow_up/' . $data->id . '/complete') . '" class="delete">' . trans_choice('general.mark_as', 1).' '.trans_choice('general.complete', 1) . '</a></li>';
+                    $action .= '<li class="sentiment"><a href="' . url('follow_up/' . $data->id . '/complete') . '" class="delete">' . trans_choice('general.mark_as', 1).' '.trans_choice('general.complete', 1) . '</a></li>';
                 }
-                $action .= '<li><a href="' . url('follow_up/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('follow_up/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('follow_ups.delete')) {
-                $action .= '<li><a href="' . url('follow_up/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('follow_up/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

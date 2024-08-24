@@ -72,10 +72,10 @@ class OtherIncomeController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('other_income.update')) {
-                $action .= '<li><a href="' . url('other_income/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('other_income/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('other_income.delete')) {
-                $action .= '<li><a href="' . url('other_income/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('other_income/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

@@ -84,10 +84,10 @@ class PledgePaymentController extends Controller
 
             }
             if (Sentinel::hasAccess('pledges.update')) {
-                $action .= '<li><a href="' . url('pledge/payment/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('pledge/payment/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('pledges.delete')) {
-                $action .= '<li><a href="' . url('pledge/payment/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('pledge/payment/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

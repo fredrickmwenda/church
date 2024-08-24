@@ -447,7 +447,7 @@ Route::group(['prefix' => 'contribution'], function () {
     Route::get('fund/{fund}/show', 'FundController@show');
     Route::post('fund/{id}/update', 'FundController@update');
     Route::get('fund/{id}/delete', 'FundController@delete');
-    //batches
+    //batches 
     Route::get('batch/data', 'ContributionBatchController@index');
     Route::get('batch/create', 'ContributionBatchController@create');
     Route::post('batch/store', 'ContributionBatchController@store');

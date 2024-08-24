@@ -95,10 +95,10 @@ class ContributionController extends Controller
             if (Sentinel::hasAccess('contributions.view')) {
             }
             if (Sentinel::hasAccess('contributions.update')) {
-                $action .= '<li><a href="' . url('contribution/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('contribution/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('contributions.delete')) {
-                $action .= '<li><a href="' . url('contribution/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('contribution/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

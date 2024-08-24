@@ -33,6 +33,7 @@ use Clickatell\Api\ClickatellHttp;
 use Clickatell\Rest;
 use Illuminate\Http\Request;
 use App\Http\Requests;
+use DateTime;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -101,7 +102,6 @@ class EventController extends Controller
                     'url' => url('event/' . $event->id . '/show')
                 ));
             }
-
         }
         $events = json_encode($events);
         return view('event.data', compact('events', 'calendars', 'locations', 'branches'));
@@ -176,9 +176,13 @@ class EventController extends Controller
                 $event->recur_end_date = $request->recur_end_date;
             }
 
-            $event->recur_next_date = date_format(date_add(date_create($request->recur_start_date),
-                date_interval_create_from_date_string($request->recur_frequency . ' ' . $request->recur_type . 's')),
-                'Y-m-d');
+            $event->recur_next_date = date_format(
+                date_add(
+                    date_create($request->recur_start_date),
+                    date_interval_create_from_date_string($request->recur_frequency . ' ' . $request->recur_type . 's')
+                ),
+                'Y-m-d'
+            );
 
             $event->recur_type = $request->recur_type;
         } else {
@@ -193,10 +197,11 @@ class EventController extends Controller
                 return redirect()->back()->withInput()->withErrors($validator);
             } else {
                 $event->featured_image = $request->file('featured_image')->getClientOriginalName();
-                $request->file('featured_image')->move(public_path() . '/uploads',
-                    $request->file('featured_image')->getClientOriginalName());
+                $request->file('featured_image')->move(
+                    public_path() . '/uploads',
+                    $request->file('featured_image')->getClientOriginalName()
+                );
             }
-
         }
         /* $files = array();
          if (!empty($request->file('files'))) {
@@ -381,29 +386,28 @@ class EventController extends Controller
                 }
                 //determine age
                 if (!empty($key->member->dob)) {
-                    $age = date("Y-m-d") - $key->member->dob;
+                    // Create a DateTime object from the date of birth
+                    $dob = new DateTime($key->member->dob);
+                    // Create a DateTime object for the current date
+                    $currentDate = new DateTime();
+                    // Calculate the age difference in years
+                    $age = $currentDate->diff($dob)->y;
+
                     if ($age < 6) {
                         $under6 = $under6 + 1;
-                    }
-                    if ($age > 5 && $age < 13) {
+                    } elseif ($age >= 6 && $age < 13) {
                         $six12 = $six12 + 1;
-                    }
-                    if ($age > 12 && $age < 19) {
+                    } elseif ($age >= 13 && $age < 19) {
                         $thirteen18 = $thirteen18 + 1;
-                    }
-                    if ($age > 18 && $age < 30) {
+                    } elseif ($age >= 19 && $age < 30) {
                         $nineteen29 = $nineteen29 + 1;
-                    }
-                    if ($age > 29 && $age < 50) {
+                    } elseif ($age >= 30 && $age < 50) {
                         $thirty49 = $thirty49 + 1;
-                    }
-                    if ($age > 49 && $age < 65) {
+                    } elseif ($age >= 50 && $age < 65) {
                         $fifty64 = $fifty64 + 1;
-                    }
-                    if ($age > 64 && $age < 80) {
+                    } elseif ($age >= 65 && $age < 80) {
                         $sixty_five79 = $sixty_five79 + 1;
-                    }
-                    if ($age > 79) {
+                    } elseif ($age >= 80) {
                         $eight_plus = $eight_plus + 1;
                     }
                 } else {
@@ -468,7 +472,6 @@ class EventController extends Controller
         GeneralHelper::audit_trail("Added attendance to event  with id:" . $request->event_id);
         Flash::success(trans('general.successfully_saved'));
         return redirect()->back();
-
     }
 
     public function remove_checkin($id)
@@ -543,8 +546,10 @@ class EventController extends Controller
                     }
                 }
                 //send the email
-                $body = Setting::where('setting_key',
-                    'volunteer_assignment_email_template')->first()->setting_value;
+                $body = Setting::where(
+                    'setting_key',
+                    'volunteer_assignment_email_template'
+                )->first()->setting_value;
                 $body = str_replace('{memberName}', $member_name, $body);
                 $body = str_replace('{eventName}', $event_name, $body);
                 $body = str_replace('{roles}', $roles, $body);
@@ -552,23 +557,24 @@ class EventController extends Controller
                 $body = str_replace('{eventDescription}', $event_description, $body);
                 $body = str_replace('{notes}', $notes, $body);
                 Mail::send([], [], function ($message) use ($member, $body) {
-                    $message->from(Setting::where('setting_key', 'company_email')->first()->setting_value,
-                        Setting::where('setting_key', 'company_name')->first()->setting_value);
+                    $message->from(
+                        Setting::where('setting_key', 'company_email')->first()->setting_value,
+                        Setting::where('setting_key', 'company_name')->first()->setting_value
+                    );
                     $message->to($member->email);
                     $message->setBody($body);
                     $message->setContentType('text/html');
-                    $message->setSubject(Setting::where('setting_key',
-                        'volunteer_assignment_email_subject')->first()->setting_value);
-
+                    $message->setSubject(Setting::where(
+                        'setting_key',
+                        'volunteer_assignment_email_subject'
+                    )->first()->setting_value);
                 });
-
             }
         }
 
         GeneralHelper::audit_trail("Added volunteer to event  with id:" . $request->event_id);
         Flash::success(trans('general.successfully_saved'));
         return redirect()->back();
-
     }
 
     public function update_volunteer(Request $request, $id)
@@ -592,7 +598,6 @@ class EventController extends Controller
         GeneralHelper::audit_trail("Updated volunteer to event  with id:" . $volunteer->event_id);
         Flash::success(trans('general.successfully_saved'));
         return redirect()->back();
-
     }
 
     public function remove_volunteer($id)
@@ -669,9 +674,13 @@ class EventController extends Controller
                 $event->recur_end_date = $request->recur_end_date;
             }
 
-            $event->recur_next_date = date_format(date_add(date_create($request->recur_start_date),
-                date_interval_create_from_date_string($request->recur_frequency . ' ' . $request->recur_type . 's')),
-                'Y-m-d');
+            $event->recur_next_date = date_format(
+                date_add(
+                    date_create($request->recur_start_date),
+                    date_interval_create_from_date_string($request->recur_frequency . ' ' . $request->recur_type . 's')
+                ),
+                'Y-m-d'
+            );
 
             $event->recur_type = $request->recur_type;
         } else {
@@ -686,10 +695,11 @@ class EventController extends Controller
                 return redirect()->back()->withInput()->withErrors($validator);
             } else {
                 $event->featured_image = $request->file('featured_image')->getClientOriginalName();
-                $request->file('featured_image')->move(public_path() . '/uploads',
-                    $request->file('featured_image')->getClientOriginalName());
+                $request->file('featured_image')->move(
+                    public_path() . '/uploads',
+                    $request->file('featured_image')->getClientOriginalName()
+                );
             }
-
         }
         /* $files = array();
          if (!empty($request->file('files'))) {
@@ -745,8 +755,6 @@ class EventController extends Controller
         $files = array_except($files, [$request->id]);
         $event->files = serialize($files);
         $event->save();
-
-
     }
 
     public function email_members(Request $request)
@@ -763,7 +771,7 @@ class EventController extends Controller
                 $member = $attender->member;
 
                 $body = $request->message;
-//lets build and replace available tags
+                //lets build and replace available tags
                 $body = str_replace('{firstName}', $member->first_name, $body);
                 $body = str_replace('{middleName}', $member->middle_name, $body);
                 $body = str_replace('{lastName}', $member->last_name, $body);
@@ -774,15 +782,15 @@ class EventController extends Controller
                 $email = $member->email;
                 if (!empty($email)) {
                     Mail::send([], [], function ($message) use ($request, $email, $body) {
-                        $message->from(Setting::where('setting_key', 'company_email')->first()->setting_value,
-                            Setting::where('setting_key', 'company_name')->first()->setting_value);
+                        $message->from(
+                            Setting::where('setting_key', 'company_email')->first()->setting_value,
+                            Setting::where('setting_key', 'company_name')->first()->setting_value
+                        );
                         $message->to($email);
                         $message->setBody($body);
                         $message->setContentType('text/html');
                         $message->setSubject($request->subject);
-
                     });
-
                 }
                 $recipients = $recipients + 1;
             }
@@ -813,7 +821,7 @@ class EventController extends Controller
             foreach ($event->volunteers as $volunteer) {
                 if (!empty($volunteer->member)) {
                     $member = $volunteer->member;
-//lets build and replace available tags
+                    //lets build and replace available tags
                     $body = str_replace('{firstName}', $member->first_name, $body);
                     $body = str_replace('{middleName}', $member->middle_name, $body);
                     $body = str_replace('{lastName}', $member->last_name, $body);
@@ -825,9 +833,11 @@ class EventController extends Controller
                     if (!empty($member->mobile_phone)) {
                         $active_sms = Setting::where('setting_key', 'active_sms')->first()->setting_value;
                         if ($active_sms == 'twilio') {
-                            $twilio = new Twilio(Setting::where('setting_key', 'twilio_sid')->first()->setting_value,
+                            $twilio = new Twilio(
+                                Setting::where('setting_key', 'twilio_sid')->first()->setting_value,
                                 Setting::where('setting_key', 'twilio_token')->first()->setting_value,
-                                Setting::where('setting_key', 'twilio_phone_number')->first()->setting_value);
+                                Setting::where('setting_key', 'twilio_phone_number')->first()->setting_value
+                            );
                             $twilio->message('+' . $member->mobile_phone, $body);
                         }
                         if ($active_sms == 'routesms') {
@@ -840,22 +850,35 @@ class EventController extends Controller
                             $GSM = $member->mobile_phone;
                             $msgtype = 2;
                             $dlr = 1;
-                            $routesms = new RouteSms($host, $port, $username, $password, $sender, $SMSText, $GSM,
+                            $routesms = new RouteSms(
+                                $host,
+                                $port,
+                                $username,
+                                $password,
+                                $sender,
+                                $SMSText,
+                                $GSM,
                                 $msgtype,
-                                $dlr);
+                                $dlr
+                            );
                             $routesms->Submit();
                         }
                         if ($active_sms == 'clickatell') {
                             $clickatell = new Rest(
-                                Setting::where('setting_key', 'clickatell_api_id')->first()->setting_value);
+                                Setting::where('setting_key', 'clickatell_api_id')->first()->setting_value
+                            );
                             $response = $clickatell->sendMessage(array($member->mobile_phone), $body);
                         }
                         if ($active_sms == 'infobip') {
-                            $infobip = new Infobip(Setting::where('setting_key',
-                                'sms_sender')->first()->setting_value, $body,
-                                $member->mobile_phone);
+                            $infobip = new Infobip(
+                                Setting::where(
+                                    'setting_key',
+                                    'sms_sender'
+                                )->first()->setting_value,
+                                $body,
+                                $member->mobile_phone
+                            );
                         }
-
                     }
                     $recipients = $recipients + 1;
                 }
@@ -889,7 +912,7 @@ class EventController extends Controller
                 $member = $volunteer->member;
 
                 $body = $request->message;
-//lets build and replace available tags
+                //lets build and replace available tags
                 $body = str_replace('{firstName}', $member->first_name, $body);
                 $body = str_replace('{middleName}', $member->middle_name, $body);
                 $body = str_replace('{lastName}', $member->last_name, $body);
@@ -900,15 +923,15 @@ class EventController extends Controller
                 $email = $member->email;
                 if (!empty($email)) {
                     Mail::send([], [], function ($message) use ($request, $email, $body) {
-                        $message->from(Setting::where('setting_key', 'company_email')->first()->setting_value,
-                            Setting::where('setting_key', 'company_name')->first()->setting_value);
+                        $message->from(
+                            Setting::where('setting_key', 'company_email')->first()->setting_value,
+                            Setting::where('setting_key', 'company_name')->first()->setting_value
+                        );
                         $message->to($email);
                         $message->setBody($body);
                         $message->setContentType('text/html');
                         $message->setSubject($request->subject);
-
                     });
-
                 }
                 $recipients = $recipients + 1;
             }
@@ -939,7 +962,7 @@ class EventController extends Controller
             foreach ($event->attenders as $attender) {
                 if (!empty($attender->member)) {
                     $member = $attender->member;
-//lets build and replace available tags
+                    //lets build and replace available tags
                     $body = str_replace('{firstName}', $member->first_name, $body);
                     $body = str_replace('{middleName}', $member->middle_name, $body);
                     $body = str_replace('{lastName}', $member->last_name, $body);
@@ -951,9 +974,11 @@ class EventController extends Controller
                     if (!empty($member->mobile_phone)) {
                         $active_sms = Setting::where('setting_key', 'active_sms')->first()->setting_value;
                         if ($active_sms == 'twilio') {
-                            $twilio = new Twilio(Setting::where('setting_key', 'twilio_sid')->first()->setting_value,
+                            $twilio = new Twilio(
+                                Setting::where('setting_key', 'twilio_sid')->first()->setting_value,
                                 Setting::where('setting_key', 'twilio_token')->first()->setting_value,
-                                Setting::where('setting_key', 'twilio_phone_number')->first()->setting_value);
+                                Setting::where('setting_key', 'twilio_phone_number')->first()->setting_value
+                            );
                             $twilio->message('+' . $member->mobile_phone, $body);
                         }
                         if ($active_sms == 'routesms') {
@@ -966,22 +991,35 @@ class EventController extends Controller
                             $GSM = $member->mobile_phone;
                             $msgtype = 2;
                             $dlr = 1;
-                            $routesms = new RouteSms($host, $port, $username, $password, $sender, $SMSText, $GSM,
+                            $routesms = new RouteSms(
+                                $host,
+                                $port,
+                                $username,
+                                $password,
+                                $sender,
+                                $SMSText,
+                                $GSM,
                                 $msgtype,
-                                $dlr);
+                                $dlr
+                            );
                             $routesms->Submit();
                         }
                         if ($active_sms == 'clickatell') {
                             $clickatell = new Rest(
-                                Setting::where('setting_key', 'clickatell_api_id')->first()->setting_value);
+                                Setting::where('setting_key', 'clickatell_api_id')->first()->setting_value
+                            );
                             $response = $clickatell->sendMessage(array($member->mobile_phone), $body);
                         }
                         if ($active_sms == 'infobip') {
-                            $infobip = new Infobip(Setting::where('setting_key',
-                                'sms_sender')->first()->setting_value, $body,
-                                $member->mobile_phone);
+                            $infobip = new Infobip(
+                                Setting::where(
+                                    'setting_key',
+                                    'sms_sender'
+                                )->first()->setting_value,
+                                $body,
+                                $member->mobile_phone
+                            );
                         }
-
                     }
                     $recipients = $recipients + 1;
                 }
@@ -1062,15 +1100,15 @@ class EventController extends Controller
         $body = "You have received a payment of " . $request->amount . ' for event(' . $event->name . '-#' . $event->id . ') on ' . $request->date;
         if (!empty(Sentinel::getUser()->email)) {
             Mail::send([], [], function ($message) use ($body) {
-                $message->from(Setting::where('setting_key', 'company_email')->first()->setting_value,
-                    Setting::where('setting_key', 'company_name')->first()->setting_value);
+                $message->from(
+                    Setting::where('setting_key', 'company_email')->first()->setting_value,
+                    Setting::where('setting_key', 'company_name')->first()->setting_value
+                );
                 $message->to(Setting::where('setting_key', 'company_email')->first()->setting_value);
                 $message->setBody($body);
                 $message->setContentType('text/html');
                 $message->setSubject("Payment Received");
-
             });
-
         }
         GeneralHelper::audit_trail("Added payment with event with id " . $id);
         Flash::success("Successfully saved");

@@ -5,7 +5,6 @@
 
 @section('page-header-scripts')
 <link rel="stylesheet" href="{{ asset('assets/plugins/fullcalendar/fullcalendar.css')}}">
-
 @endsection
 @section('content')
 <?php
@@ -18,87 +17,9 @@ $translations = [
 ];
 $events = $events;
 
-
-
 ?>
 <div class="row">
-    <!-- @if (Sentinel::hasAccess('dashboard.members_statistics'))
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-red">
-                        <i class="fa fa-users"></i>
-                    </span>
-                    <div class="info-box-content">
-                        <span class="info-box-text">{{ trans_choice('general.registered', 1) }}
-                            <br>{{ trans_choice('general.member', 2) }}</span>
-                        <span class="info-box-number">{{ \App\Models\Member::count() }}</span>
-                    </div>
-                </div>
-            </div>
-        @endif
-        @if (Sentinel::hasAccess('dashboard.tags_statistics'))
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-blue"><i class="fa fa-tags"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">
-                            {{ trans_choice('general.total', 1) }}
-                            <br>
-                            {{-- {{ trans_choice('general.tag', 2) }} --}}
-                            organization
-                        </span>
-                        <span class="info-box-number">{{ \App\Models\Tag::count() }}</span>
-                    </div>
-                </div>
-            </div>
-        @endif
-        <div class="clearfix visible-sm-block"></div>
-        @if (Sentinel::hasAccess('dashboard.contributions_statistics'))
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-green"><i class="fa fa-money"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">{{ trans_choice('general.total', 1) }}
-                            <br>{{ trans_choice('general.contribution', 2) }}</span>
-                        @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
-                            <span class="info-box-number">
-                                {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
-                                {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }} </span>
-                        @else
-                            <span class="info-box-number">
-                                {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }}
-                                {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
-                        @endif
-
-                    </div>
-                </div>
-            </div>
-        @endif
-        <div class="clearfix visible-sm-block"></div>
-        @if (Sentinel::hasAccess('dashboard.contributions_statistics'))
-            <div class="col-md-3 col-sm-6 col-xs-12">
-                <div class="info-box">
-                    <span class="info-box-icon bg-aqua"><i class="fa fa-hand-lizard-o"></i></span>
-
-                    <div class="info-box-content">
-                        <span class="info-box-text">{{ trans_choice('general.total', 1) }}
-                            <br>{{ trans_choice('general.pledge', 2) }}</span>
-                        @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
-                            <span class="info-box-number">
-                                {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
-                                {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }} </span>
-                        @else
-                            <span class="info-box-number">
-                                {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }}
-                                {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
-                        @endif
-
-                    </div>
-                </div>
-            </div>
-        @endif -->
+ 
     @if (Sentinel::hasAccess('dashboard.members_statistics'))
     <div class="col-md-6 col-sm-6 col-lg-6 col-xl-3">
         <div class="card dash-widget">
@@ -183,17 +104,17 @@ $events = $events;
                     <h4>{{ trans_choice('general.contribution', 2) }}</h4>
                     <a href="{{ url('contribution/data') }}" class="text-decoration-none">
 
-                    @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
-                    <span>
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
-                        {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }}</span>
+                        @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
+                        <span>
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
+                            {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }}</span>
 
-                    @else
-                    <span>
-                        {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }}
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
-                    @endif
-</a>
+                        @else
+                        <span>
+                            {{ number_format(\App\Helpers\GeneralHelper::total_contributions(), 2) }}
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
+                        @endif
+                    </a>
                 </div>
             </div>
         </div>
@@ -209,16 +130,16 @@ $events = $events;
                     <h4>{{ trans_choice('general.pledge', 2) }}</h4>
                     <a href="{{ url('pledge/data') }}" class="text-decoration-none">
 
-                    @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
-                    <span>
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
-                        {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }} </span>
-                    @else
-                    <span>
-                        {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }}
-                        {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
-                    @endif
-</a>
+                        @if (\App\Models\Setting::where('setting_key', 'currency_position')->first()->setting_value == 'left')
+                        <span>
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}
+                            {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }} </span>
+                        @else
+                        <span>
+                            {{ number_format(\App\Helpers\GeneralHelper::total_pledges_payments(), 2) }}
+                            {{ \App\Models\Setting::where('setting_key', 'currency_symbol')->first()->setting_value }}</span>
+                        @endif
+                    </a>
 
                 </div>
             </div>
@@ -281,9 +202,6 @@ $events = $events;
     </div>
     @endif
 </div>
-
-
-
 
 
 <div class="row">
@@ -383,8 +301,9 @@ $events = $events;
         </div>
         <!-- END PORTLET -->
     </div>
+    @endif
 </div>
-@endif
+
 @endsection
 @section('footer-scripts')
 <script src="{{ asset('assets/plugins/fullcalendar/fullcalendar.js') }}"></script>

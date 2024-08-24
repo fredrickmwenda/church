@@ -57,10 +57,10 @@ class UserController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('users.view')) {
-                $action .= '<li><a href="' . url('user/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('user/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('users.update')) {
-                $action .= '<li><a href="' . url('user/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('user/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

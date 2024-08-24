@@ -67,10 +67,10 @@ class AssetController extends Controller
                     // $action .= '<li><a href="' . url('asset/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
                 }
                 if (Sentinel::hasAccess('assets.update')) {
-                    $action .= '<li><a href="' . url('asset/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                    $action .= '<li class="sentiment"><a href="' . url('asset/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
                 }
                 if (Sentinel::hasAccess('assets.delete')) {
-                    $action .= '<li><a href="' . url('asset/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                    $action .= '<li class="sentiment"><a href="' . url('asset/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
                 }
                 $action .= "</ul></div>";
                 return $action;

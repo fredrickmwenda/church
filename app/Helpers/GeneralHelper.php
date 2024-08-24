@@ -23,6 +23,7 @@ use App\Models\Pledge;
 use App\Models\PledgePayment;
 
 use App\Models\Setting;
+use App\Models\SmsGateway;
 use Cartalyst\Sentinel\Laravel\Facades\Sentinel;
 
 class GeneralHelper
@@ -32,27 +33,50 @@ class GeneralHelper
      */
     public static function send_sms($to, $msg)
     {
-        if (Setting::where('setting_key', 'sms_enabled')->first()->setting_value == 1) {
-            if (!empty(SmsGateway::find(Setting::where('setting_key',
-                'active_sms')->first()->setting_value))
-            ) {
-                $active_sms = SmsGateway::find(Setting::where('setting_key',
-                    'active_sms')->first()->setting_value);
-                $append = "&";
-                $append .= $active_sms->to_name . "=" . $to;
-                $append .= "&" . $active_sms->msg_name . "=" . urlencode($msg);
-                $url = $active_sms->url . $append;
-                //send sms here
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $url);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_VERBOSE, true);
-                $curl_scraped_page = curl_exec($ch);
-                curl_close($ch);
+        // Check if SMS is enabled
+        $smsEnabledSetting = Setting::where('setting_key', 'sms_enabled')->first();
+        if ($smsEnabledSetting && $smsEnabledSetting->setting_value == 1) {
+            // Get the active SMS gateway setting
+            $activeSmsSetting = Setting::where('setting_key', 'active_sms')->first();
+            
+            if ($activeSmsSetting) {
+                // Find the SMS gateway by the active SMS setting value
+                $activeSms = SmsGateway::find($activeSmsSetting->setting_value);
+    
+                // Check if the active SMS gateway is found
+                if ($activeSms) {
+                    // Prepare the URL with parameters
+                    $append = "&";
+                    $append .= $activeSms->to_name . "=" . $to;
+                    $append .= "&" . $activeSms->msg_name . "=" . urlencode($msg);
+                    $url = $activeSms->url . $append;
+    
+                    // Send the SMS using curl
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $url);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_VERBOSE, true);
+                    $response = curl_exec($ch);
+                    $error = curl_error($ch);
+                    curl_close($ch);
+    
+                    if ($response) {
+                        return ['success' => true, 'message' => 'SMS sent successfully'];
+                    } else {
+                        return ['success' => false, 'message' => 'Failed to send SMS: ' . $error];
+                    }
+                } else {
+                    return ['success' => false, 'message' => 'No active SMS gateway configured'];
+                }
+            } else {
+                return ['success' => false, 'message' => 'Active SMS setting is missing'];
             }
+        } else {
+            return ['success' => false, 'message' => 'SMS sending is disabled'];
         }
-
     }
+    
+    
 
     public static function pledge_amount_due($id)
     {

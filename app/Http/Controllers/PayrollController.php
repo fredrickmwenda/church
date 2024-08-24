@@ -91,7 +91,7 @@ class PayrollController extends Controller
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('payroll.view')) {
-                $action .= '<li><a href="' . url('payroll/' . $data->id . '/payslip') . '" class="" target="_blank">' . trans_choice('general.payslip', 1) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('payroll/' . $data->id . '/payslip') . '" class="" target="_blank">' . trans_choice('general.payslip', 1) . '</a></li>';
             }
             if (Sentinel::hasAccess('payroll.update')) {
                 $action .= '<li><a href="' . url('payroll/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';

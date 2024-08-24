@@ -8,17 +8,17 @@
         <div class="box-header with-border">
             <h3 class="box-title">{{ trans_choice('general.setting',2) }}</h3>
 
-            <div class="box-tools pull-right mb-2">
+            <!-- <div class="box-tools pull-right mb-2">
                 <button type="submit" class="btn btn-info">{{ trans('general.save') }}</button>
-            </div>
+            </div> -->
         </div>
         <div class="box-body">
         <div class="card tab-box">
             <div class="row user-tabs">
                 <div class="col-lg-12 col-md-12 col-sm-12 line-tabs">
                     <ul class="nav nav-tabs nav-tabs-bottom" role="tablist">
-                        <li class="nav-item active" role="presentation"><a href="#tags" data-bs-toggle="tab" class="nav-link" aria-selected="false" role="tab" tabindex="-1">{{ trans('general.general') }}</a></li>
-                        <li class="nav-item" role="presentation"><a href="#sms" data-bs-toggle="tab" class="nav-link active" aria-selected="true" role="tab">{{ trans('general.sms') }}</a></li>
+                        <li class="nav-item active" role="presentation"><a href="#general" data-bs-toggle="tab" class="nav-link active" aria-selected="false" role="tab" tabindex="-1">{{ trans('general.general') }}</a></li>
+                        <li class="nav-item" role="presentation"><a href="#sms" data-bs-toggle="tab" class="nav-link" aria-selected="true" role="tab">{{ trans('general.sms') }}</a></li>
                         <li class="nav-item" role="presentation"><a href="#email_templates" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">{{ trans_choice('general.email',1) }} {{ trans_choice('general.template',2) }}</a></li>
                         <li class="nav-item" role="presentation"><a href="#sms_templates" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">{{ trans_choice('general.sms',1) }} {{ trans_choice('general.template',2) }}</a></li>
                         <li class="nav-item" role="presentation"><a href="#system" data-bs-toggle="tab" class="nav-link" aria-selected="false" tabindex="-1" role="tab">{{ trans_choice('general.system',1) }}</a></li>
@@ -31,7 +31,7 @@
             <div class="nav-tabs-custom">
                
                 <div class="tab-content">
-                    <div class="tab-pane" id="general">
+                    <div class="tab-pane active" id="general">
                         <div class="form-group">
                             {!! Form::label('company_name',trans('general.company_name'),array('class'=>'col-sm-2 control-label')) !!}
                             <div class="col-sm-10">
@@ -98,11 +98,11 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-info">{{ trans('general.save') }}</button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <!-- /.tab-pane -->
                     <div class="tab-pane" id="sms">
@@ -119,11 +119,11 @@
                                 {!! Form::select('active_sms',$sms_gateways,\App\Models\Setting::where('setting_key','active_sms')->first()->setting_value,array('class'=>'form-control','placeholder'=>'')) !!}
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <button type="submit" class="btn btn-info">{{ trans('general.save') }}</button>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="tab-pane" id="email_templates">
@@ -207,7 +207,7 @@
                         </div>
 
                     </div>
-                    <div class="tab-pane active" id="system">
+                    <div class="tab-pane" id="system">
                         <div class="form-group">
                             {!! Form::label('enable_cron',trans('general.cron_enabled'),array('class'=>'col-sm-3 control-label')) !!}
                             <div class="col-sm-9">

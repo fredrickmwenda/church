@@ -85,18 +85,19 @@ class PledgeController extends Controller
             });
         
         return DataTables::of($query)->editColumn('member', function ($data) {
+            // Show not working rn
             return '<a href="' . url('member/' . $data->member_id . '/show') . '" class="">' . $data->member_name . '</a>';
         })->editColumn('action', function ($data) {
             $action = '<div class="btn-group"><button type="button" class="btn btn-info btn-flat dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><i class="fa fa-list"></i></button><ul class="dropdown-menu dropdown-menu-right" role="menu">';
             if (Sentinel::hasAccess('pledges.view')) {
-                $action .= '<li><a href="' . url('pledge/' . $data->id . '/show') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
-                $action .= '<li><a href="' . url('pledge/' . $data->id . '/payment/data') . '" class="">' . trans_choice('general.payment', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('pledge/' . $data->id . '/payment/data') . '" class="">' . trans_choice('general.detail', 2) . '</a></li>';
+                $action .= '<liclass="sentiment"><a href="' . url('pledge/' . $data->id . '/payment/data') . '" class="">' . trans_choice('general.payment', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('pledges.update')) {
-                $action .= '<li><a href="' . url('pledge/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('pledge/' . $data->id . '/edit') . '" class="">' . trans_choice('general.edit', 2) . '</a></li>';
             }
             if (Sentinel::hasAccess('pledges.delete')) {
-                $action .= '<li><a href="' . url('pledge/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
+                $action .= '<li class="sentiment"><a href="' . url('pledge/' . $data->id . '/delete') . '" class="delete">' . trans_choice('general.delete', 2) . '</a></li>';
             }
             $action .= "</ul></div>";
             return $action;

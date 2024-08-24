@@ -6,7 +6,7 @@
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">{{ trans('general.add') }} {{ trans_choice('general.role',1) }}</h3>
-
+ 
         </div>
         {!! Form::open(array('url' => 'user/role/store','class'=>'',"enctype" => "multipart/form-data")) !!}
         <div class="box-body">
@@ -40,10 +40,11 @@
                                             @endif
                                         </td>
                                         <td>
-                                            <input type="checkbox" data-parent="{{$permission->parent_id}}"
+                                            <input type="checkbox" 
+                                                   data-parent="{{$permission->parent_id}}"
                                                    name="permission[]" value="{{$permission->slug}}"
                                                    id="{{$permission->id}}"
-                                                   class="form-control pcheck">
+                                                   class="form-check-input pcheck">
                                             <label class="" for="{{$permission->id}}">
 
                                             </label>
@@ -63,22 +64,33 @@
         </div>
         {!! Form::close() !!}
     </div>
-    <script>
+ 
+@endsection
+@push('js')
+<script>
         $(document).ready(function () {
-            $(".pcheck").on('ifChecked', function (e) {
-                if ($(this).attr('data-parent') == 0) {
-                    var id = $(this).attr('id');
-                    $(":checkbox[data-parent=" + id + "]").iCheck('check');
+            $(".pcheck").on('change', function(e) {
+            if ($(this).attr('data-parent') == 0) {
+                var id = $(this).attr('id');
+                var isChecked = $(this).is(':checked');
+                console.log("Checkbox changed:", $(this).attr('id'));
+                $(":checkbox[data-parent=" + id + "]").prop('checked', isChecked);
+            }
+        });
+            // $(".pcheck").on('ifChecked', function (e) {
+            //     if ($(this).attr('data-parent') == 0) {
+            //         var id = $(this).attr('id');
+            //         $(":checkbox[data-parent=" + id + "]").iCheck('check');
 
-                }
-            });
-            $(".pcheck").on('ifUnchecked', function (e) {
-                if ($(this).attr('data-parent') == 0) {
-                    var id = $(this).attr('id');
-                    $(":checkbox[data-parent=" + id + "]").iCheck('uncheck');
+            //     }
+            // });
+            // $(".pcheck").on('ifUnchecked', function (e) {
+            //     if ($(this).attr('data-parent') == 0) {
+            //         var id = $(this).attr('id');
+            //         $(":checkbox[data-parent=" + id + "]").iCheck('uncheck');
 
-                }
-            });
+            //     }
+            // });
         })
     </script>
-@endsection
+@endpush

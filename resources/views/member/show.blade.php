@@ -528,7 +528,7 @@
                 <div class="tab-pane " id="family">
                     <div class="btn-group-horizontal">
                         @if (empty($member->family))
-                        <a type="button" class="btn btn-success margin delete"
+                        <a type="button" class="btn btn-success margin"
                             href="{{ url('member/' . $member->id . '/family/create') }}">{{ trans_choice('general.create', 1) }}
                             {{ trans_choice('general.family', 1) }}</a>
                         @else
